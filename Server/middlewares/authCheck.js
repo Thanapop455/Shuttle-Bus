@@ -1,0 +1,93 @@
+const jwt = require("jsonwebtoken");
+const prisma = require("../config/prisma");
+
+exports.authCheck = async (req, res, next) => {
+  try {
+    // 📌 ตรวจสอบว่า Request มี Header "Authorization" หรือไม่
+    const headerToken = req.headers.authorization;
+    if (!headerToken) {
+      return res.status(401).json({ message: "No Token Provided" });
+    }
+
+    const token = headerToken.split(" ")[1];
+
+    // 📌 ตรวจสอบ Token ว่าถูกต้องหรือไม่
+    let decode;
+    try {
+      decode = jwt.verify(token, process.env.SECRET);
+    } catch (err) {
+      console.error("JWT Verification Error:", err.message);
+      return res.status(401).json({ message: "Invalid or Expired Token" });
+    }
+
+    req.user = decode;
+
+    // 📌 ตรวจสอบว่าผู้ใช้มีสิทธิ์เข้าใช้งานหรือไม่
+    const user = await prisma.user.findUnique({
+      where: { email: req.user.email },
+    });
+
+    if (!user) {
+      return res.status(404).json({ message: "User Not Found" });
+    }
+
+    if (!user.enabled) {
+      return res.status(403).json({ message: "Access Denied: Account Disabled" });
+    }
+
+    next();
+  } catch (err) {
+    console.error("AuthCheck Error:", err);
+    return res.status(500).json({ message: "Server Error" });
+  }
+};
+
+exports.adminCheck = async (req, res, next) => {
+    try {
+      // 📌 ตรวจสอบ Email ของผู้ใช้ที่ Login
+      const { email } = req.user;
+      const adminUser = await prisma.user.findUnique({
+        where: { email },
+      });
+  
+      if (!adminUser) {
+        return res.status(404).json({ message: "User Not Found" });
+      }
+  
+      if (adminUser.role !== "admin") {
+        return res.status(403).json({ message: "Access Denied: Admin Only" });
+      }
+  
+      next();
+    } catch (err) {
+      console.error("AdminCheck Error:", err);
+      return res.status(500).json({ message: "Server Error" });
+    }
+  };
+  
+  exports.driverCheck = async (req, res, next) => {
+    try {
+      // ดึง Email ของผู้ใช้จาก req.user
+      const { email } = req.user;
+      
+      //ค้นหา User ในฐานข้อมูล
+      const driverUser = await prisma.user.findUnique({
+        where: { email },
+      });
+  
+      //ถ้าไม่มี User
+      if (!driverUser) {
+        return res.status(404).json({ message: "User Not Found" });
+      }
+  
+      //ถ้าไม่ใช่ Driver
+      if (driverUser.role !== "driver") {
+        return res.status(403).json({ message: "Access Denied: Drivers Only" });
+      }
+  
+      next();
+    } catch (err) {
+      console.error("DriverCheck Error:", err);
+      return res.status(500).json({ message: "Server Error" });
+    }
+  };

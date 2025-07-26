@@ -1,0 +1,77 @@
+/* ✅ Navbar ทั่วไป */
+.navbar {
+  background-color: #4CAF50;
+  padding: 12px 40px; /* ✅ เพิ่ม padding ให้ขยายด้านข้าง */
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  width: 100%; 
+  position: fixed; 
+  top: 0;
+  left: 0;
+  z-index: 1000;
+}
+
+/* ✅ จัดให้ Navbar Container อยู่ตรงกลาง */
+.navbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 95%; /* ✅ ลดขนาดเพื่อให้มีช่องว่างขอบซ้ายขวา */
+  max-width: 1200px;
+  margin: 0 auto; /* ✅ จัดให้อยู่ตรงกลาง */
+}
+
+/* ✅ ปรับให้ Logo และเมนูอยู่ตรงกลางแนวตั้ง */
+.navbar-left {
+  display: flex;
+  align-items: center;
+}
+
+/* ✅ ขนาดโลโก้ */
+.logo-img {
+  width: 40px;
+  height: 40px;
+  margin-right: 15px;
+}
+
+/* ✅ ปรับระยะห่างของลิงก์ */
+.nav-link {
+  text-decoration: none;
+  color: white;
+  border: 2px solid white;
+  font-size: 18px;
+  font-weight: 500;
+  margin: 0 10px; /* ✅ เพิ่มระยะห่างซ้ายขวา */
+  padding: 10px 16px; /* ✅ เพิ่มขนาดให้ดูสมดุล */
+  border-radius: 8px;
+  transition: background 0.3s ease-in-out;
+}
+
+.nav-link:hover {
+  background-color: white;
+  color: #4CAF50;
+  border: 2px solid yellow;
+}
+
+/* ✅ ปรับให้ปุ่ม Login อยู่ตรงกลางแนวตั้ง */
+.navbar-right {
+  display: flex;
+  align-items: center;
+}
+
+/* ✅ ปรับขนาดปุ่ม Login */
+.login-button {
+  background-color: #4CAF50;
+  border: 2px solid white;
+  color: white;
+  padding: 10px 20px; /* ✅ เพิ่ม padding ให้ใหญ่ขึ้น */
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.login-button:hover {
+  background-color: white;
+  color: #4CAF50;
+  border: 2px solid yellow;
+}

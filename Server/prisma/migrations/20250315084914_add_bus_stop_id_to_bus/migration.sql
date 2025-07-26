@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE `bus` ADD COLUMN `busStopId` INTEGER NULL;
+
+-- AddForeignKey
+ALTER TABLE `Bus` ADD CONSTRAINT `Bus_busStopId_fkey` FOREIGN KEY (`busStopId`) REFERENCES `BusStop`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
